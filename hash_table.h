@@ -11,6 +11,7 @@ struct Student {
     unsigned age;
     unsigned weight;
 };
+
 int HashFunctionHorner(const std::string& s, int table_size, const int key);
 typedef std::string Key;
 typedef Student Value;
@@ -19,19 +20,20 @@ class HashTable {
     static const int default_size = 8;
     constexpr static const double rehash_size = 0.75;
     struct Node{
-        list<Key> key;
-        list<Student> value;
+
     };
     Node** arr;
     int table_size;
     int buffer_size;
+    void resize();
+    void rehash();
 public:
     HashTable();
 
     ~HashTable();
 
-    HashTable(const HashTable& b);
-    HashTable(HashTable&& b);
+    HashTable(const HashTable& b); // copy
+    HashTable(HashTable&& b); // nullptr to table
 
 
     HashTable& operator=(const HashTable& b);
@@ -41,7 +43,7 @@ public:
     // Обменивает значения двух хэш-таблиц.
     void swap(HashTable& b);
 
-    virtual // Очищает контейнер.
+     // Очищает контейнер.
     void clear();
     // Удаляет элемент по заданному ключу.
     bool erase(const Key& k);
