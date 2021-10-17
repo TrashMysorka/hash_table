@@ -5,6 +5,7 @@
 // характеристики студента.
 #include <iostream>
 #include <list>
+#include <vector>
 using namespace std;
 
 struct Student {
@@ -18,15 +19,12 @@ typedef Student Value;
 
 class HashTable {
     static const int default_size = 8;
-    constexpr static const double rehash_size = 0.75;
-    struct Node{
-
-    };
-    Node** arr;
-    int table_size;
+    static const int rehash_size = 8;
+    vector<list<pair<Key, Value>>> arr;
     int buffer_size;
+    Value default_student;
+    //void rehash();
     void resize();
-    void rehash();
 public:
     HashTable();
 
