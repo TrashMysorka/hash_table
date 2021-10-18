@@ -1,6 +1,7 @@
 #include "hash_table.h"
 #include <iostream>
 #include <list>
+using namespace std;
 class aaaaaaaaa: public exception
         {
     virtual const char* what() const throw()
@@ -18,14 +19,14 @@ int hash_func(const Key& s, int table_size)
 }
 
 void HashTable::resize(){
-    vector<list<pair<Key, Value>>> new_arr = arr;
+    vector<list<pair<Key, Value>>*> new_arr = arr;
     arr.clear();
     buffer_size *= 2;
-    list<pair<Key, Value>> k;
+    list<pair<Key, Value>>* k;
     arr.resize(buffer_size, k);
     for (int i = 0; i < buffer_size / 2; i++){
-        if (!new_arr[i].empty()){
-            for (auto & it : new_arr[i]){
+        if (!new_arr[i]->empty()){
+            for (auto & it : *new_arr[i]){
             insert(it.first, it.second);
         }
 
@@ -36,27 +37,39 @@ void HashTable::resize(){
 
 HashTable::HashTable(){
     buffer_size = default_size;
-    list<pair<Key, Value>> k;
+    list<pair<Key, Value>>* k = nullptr;
     arr.resize(buffer_size, k);
 }
 
 HashTable::~HashTable() {
-
+    for (auto & it : arr){
+        delete it;
+    }
 
 }
 HashTable::HashTable(const HashTable& b): HashTable(){
     arr.clear();
     arr.resize(b.arr.size());
+    buffer_size = b.buffer_size;
     for (const auto & it : b.arr){
         arr.push_back(it);
     }
+}
+HashTable::HashTable(HashTable &&b) {
+    arr.clear();
+    arr.resize(b.arr.size());
+    buffer_size = b.buffer_size;
+    for (auto & it : b.arr){
+        it = nullptr;
+    }
+
 }
 size_t HashTable::size() const{
     return buffer_size;
 }
 bool HashTable::contains(const Key& k) const{
     int hash = hash_func(k, buffer_size);
-    for (const auto & it : arr[hash]) {
+    for (const auto & it : *arr[hash]) {
         if (it.first == k){
             return true;
         }
@@ -65,10 +78,10 @@ bool HashTable::contains(const Key& k) const{
 }
 bool HashTable::erase(const Key& k) {
     int hash = hash_func(k, buffer_size);
-    for (auto it = arr[hash].begin(); it!=arr[hash].end(); it++) {
+    for (auto it = arr[hash]->begin(); it != arr[hash]->end(); it++){
 
         if (it->first == k) {
-            arr[hash].erase(it);
+            arr[hash]->erase(it);
             return true;
         }
 
@@ -78,19 +91,22 @@ bool HashTable::erase(const Key& k) {
 bool HashTable::insert(const Key& k, const Value& v){
     int hash = hash_func(k, buffer_size);
     //cout << hash << endl;
-    arr[hash].push_front(make_pair(k, v));
-    for (auto it = arr[hash].begin(); it != arr[hash].end(); it++){
+    if (arr[hash] == nullptr){
+        arr[hash] = new list<pair<Key, Value>>;
+    }
+    arr[hash]->push_front(make_pair(k, v));
+    for (auto it = arr[hash]->begin(); it != arr[hash]->end(); it++){
         //cout << it->second.weight << endl;
     }
 
-    if(arr[hash].size() > rehash_size){
+    if(arr[hash]->size() > rehash_size){
         resize();
     }
     return true;
 }
 bool HashTable::empty() const{
     for (int i = 0; i < buffer_size / 2; i++){
-        if (!arr[i].empty()){
+        if (!arr[i]->empty()){
             return false;
         }
     }
@@ -99,7 +115,7 @@ bool HashTable::empty() const{
 Value& HashTable::operator[](const Key &k) {
     if (contains(k)){
         int hash = hash_func(k, buffer_size);
-        for (auto & it : arr[hash]){
+        for (auto & it : *arr[hash]){
             if (it.first == k){
                 return it.second;
             }
@@ -113,7 +129,7 @@ Value& HashTable::operator[](const Key &k) {
 Value& HashTable::at(const Key &k) {
     if (contains(k)){
         int hash = hash_func(k, buffer_size);
-        for (auto & it : arr[hash]){
+        for (auto & it : *arr[hash]){
             if (it.first == k){
                 return it.second;
             }
@@ -123,4 +139,27 @@ Value& HashTable::at(const Key &k) {
         throw aaaaaaaaa;
     }
 }
+void HashTable::swap(HashTable &b) {
+    int prom = buffer_size;
+    buffer_size = b.buffer_size;
+    b.buffer_size = prom;
+    arr.swap(b.arr);
+}
 void HashTable::clear(){}
+HashTable& HashTable::operator=(HashTable b) {
+    buffer_size = b.buffer_size;
+    arr.swap(b.arr);
+    return *this;
+}
+bool operator==(const HashTable& a, const HashTable& b){
+    bool size = a.buffer_size == b.buffer_size;
+    bool arrs = a.arr == b.arr;
+    return size && arrs;
+}
+bool operator!=(const HashTable& a, const HashTable& b){
+
+        bool size = a.buffer_size == b.buffer_size;
+        bool arrs = a.arr == b.arr;
+        return !(size && arrs);
+
+}

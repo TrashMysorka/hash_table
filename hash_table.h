@@ -22,7 +22,7 @@ int hash_func(const Key& s, int table_size);
 class HashTable {
     static const int default_size = 8;
     static const int rehash_size = 8;
-    vector<list<pair<Key, Value>>> arr;
+    vector<list<pair<Key, Value>>*> arr;
     int buffer_size;
     Value default_student;
     //void rehash();
@@ -36,9 +36,9 @@ public:
     HashTable(HashTable&& b); // nullptr to table
 
 
-    HashTable& operator=(const HashTable& b);
-    HashTable& operator=(HashTable&& b);
-
+    //HashTable& operator=(const HashTable& b);
+    //HashTable& operator=(HashTable&& b);
+    HashTable& operator=(HashTable b);
 
     // Обменивает значения двух хэш-таблиц.
     void swap(HashTable& b);
