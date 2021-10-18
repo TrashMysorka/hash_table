@@ -1,12 +1,18 @@
 #include "hash_table.h"
 #include <iostream>
 #include <list>
-#include <algorithm>
+class aaaaaaaaa: public exception
+        {
+    virtual const char* what() const throw()
+    {
+        return "aaaaaaaaa";
+    }
+        } aaaaaaaaa;
 int hash_func(const Key& s, int table_size)
 {
     int hash_result = 0;
-    for (int i = 0; i != s.size(); ++i)
-        hash_result = (hash_result + s[i]);
+    for (char i : s)
+        hash_result = (hash_result + i);
     hash_result = (hash_result * 2) % table_size;
     return hash_result;
 }
@@ -19,8 +25,8 @@ void HashTable::resize(){
     arr.resize(buffer_size, k);
     for (int i = 0; i < buffer_size / 2; i++){
         if (!new_arr[i].empty()){
-            for (auto it = new_arr[i].begin(); it != new_arr[i].end(); it++){
-            insert(it->first, it->second);
+            for (auto & it : new_arr[i]){
+            insert(it.first, it.second);
         }
 
         }
@@ -38,14 +44,19 @@ HashTable::~HashTable() {
 
 
 }
-HashTable::HashTable(const HashTable& b): HashTable(){}
+HashTable::HashTable(const HashTable& b): HashTable(){
+    arr.clear();
+    arr.resize(b.arr.size());
+    for (const auto & it : b.arr){
+        arr.push_back(it);
+    }
+}
 size_t HashTable::size() const{
     return buffer_size;
 }
 bool HashTable::contains(const Key& k) const{
     int hash = hash_func(k, buffer_size);
-    //return any_of(arr[hash].begin(), arr[hash].end(), [k](const Key& i){return i==k;});
-    for (const auto & it : arr[hash]) { // ask what is anyoff
+    for (const auto & it : arr[hash]) {
         if (it.first == k){
             return true;
         }
@@ -97,6 +108,19 @@ Value& HashTable::operator[](const Key &k) {
     else{
         insert(k, default_student);
         return default_student;
+    }
+}
+Value& HashTable::at(const Key &k) {
+    if (contains(k)){
+        int hash = hash_func(k, buffer_size);
+        for (auto & it : arr[hash]){
+            if (it.first == k){
+                return it.second;
+            }
+        }
+    }
+    else{
+        throw aaaaaaaaa;
     }
 }
 void HashTable::clear(){}

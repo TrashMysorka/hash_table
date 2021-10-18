@@ -10,8 +10,8 @@ int main() {
      bool tvar = t.insert("2", s);
      Value sukar = t["loh"];
      cout << sukar.weight;
-     //t.erase("loh");
-     cout << t.contains("loh") << endl;
+     t.erase("loh");
+     cout << t.at("loh").weight << endl;
      cout << tvar;
     return 0;
 }

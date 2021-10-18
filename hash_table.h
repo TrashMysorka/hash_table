@@ -13,9 +13,11 @@ struct Student {
     unsigned weight;
 };
 
-int HashFunctionHorner(const std::string& s, int table_size, const int key);
+
 typedef std::string Key;
 typedef Student Value;
+
+int hash_func(const Key& s, int table_size);
 
 class HashTable {
     static const int default_size = 8;
