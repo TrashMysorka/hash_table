@@ -24,7 +24,8 @@ class HashTable {
     static const int rehash_size = 8;
     vector<list<pair<Key, Value>>*> arr;
     int buffer_size;
-    Value default_student;
+    int table_size;
+    Value default_student{};
     //void rehash();
     void resize();
 public:
@@ -35,10 +36,12 @@ public:
     HashTable(const HashTable& b); // copy
     HashTable(HashTable&& b); // nullptr to table
 
+    class aaaaaaaaa: public exception {
 
-    //HashTable& operator=(const HashTable& b);
-    //HashTable& operator=(HashTable&& b);
-    HashTable& operator=(HashTable b);
+    }exc;
+    HashTable& operator=(const HashTable& b);
+    HashTable& operator=(HashTable&& b);
+    //HashTable& operator=(HashTable b);
 
     // Обменивает значения двух хэш-таблиц.
     void swap(HashTable& b);
@@ -60,13 +63,15 @@ public:
 
     // Возвращает значение по ключу. Бросает исключение при неудаче.
     Value& at(const Key& k);
-    const Value& at(const Key& k) const;
+    //const Value& at(const Key& k) const; ???
 
     size_t size() const;
     bool empty() const;
 
     friend bool operator==(const HashTable& a, const HashTable& b);
     friend bool operator!=(const HashTable& a, const HashTable& b);
+
+
 };
 
 //bool operator==(const HashTable& a, const HashTable& b);
