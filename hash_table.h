@@ -26,22 +26,19 @@ class HashTable {
     int buffer_size;
     int table_size;
     Value default_student{};
-    //void rehash();
+
     void resize();
 public:
     HashTable();
 
     ~HashTable();
 
-    HashTable(const HashTable& b); // copy
-    HashTable(HashTable&& b); // nullptr to table
+    HashTable(const HashTable& b);
 
-    class aaaaaaaaa: public exception {
+    HashTable(HashTable&& b);
 
-    }exc;
     HashTable& operator=(const HashTable& b);
     HashTable& operator=(HashTable&& b);
-    //HashTable& operator=(HashTable b);
 
     // Обменивает значения двух хэш-таблиц.
     void swap(HashTable& b);
@@ -70,10 +67,6 @@ public:
 
     friend bool operator==(const HashTable& a, const HashTable& b);
     friend bool operator!=(const HashTable& a, const HashTable& b);
-
-
 };
 
-//bool operator==(const HashTable& a, const HashTable& b);
-//bool operator!=(const HashTable& a, const HashTable& b);
 

@@ -6,9 +6,6 @@
 using namespace std;
 
 
-
-
-
 int hash_func(const Key& s, int table_size)
 {
     int hash_result = 0;
@@ -33,7 +30,7 @@ void HashTable::resize(){
 
         }
     }
-    }
+}
 
 
 HashTable::HashTable(){
@@ -47,13 +44,7 @@ HashTable::HashTable(){
 
 
 HashTable::~HashTable() {
-    /*for (const auto it : arr){
-        if(it != nullptr){
-            delete it;
-        }
-    }*/
     vector<list<pair<Key, Value>>*>().swap(arr);
-
 }
 
 
@@ -62,7 +53,6 @@ HashTable::HashTable(const HashTable& b): HashTable(){
     buffer_size = b.buffer_size;
     table_size = b.table_size;
     default_student = b.default_student;
-
 }
 
 
@@ -74,8 +64,8 @@ HashTable::HashTable(HashTable &&b){
     for (auto & it : b.arr){
         it = nullptr;
     }
-
 }
+
 
 HashTable& HashTable::operator=(const HashTable& b) {
     if (this == &b){
@@ -88,6 +78,8 @@ HashTable& HashTable::operator=(const HashTable& b) {
 
     return *this;
 }
+
+
 HashTable& HashTable::operator=(HashTable &&b){
     if (this == &b){
         return *this;
@@ -101,11 +93,7 @@ HashTable& HashTable::operator=(HashTable &&b){
     }
     return *this;
 }
-/*HashTable& HashTable::operator=(HashTable b) {
-    buffer_size = b.buffer_size;
-    table_size = b.table_size;
-    arr.swap(b.arr);
-}*/
+
 
 void HashTable::swap(HashTable &b) {
     int prom = buffer_size;
@@ -162,11 +150,11 @@ bool HashTable::contains(const Key& k) const{
 
     for (const auto & it : *arr[hash]) {
 
-
         if (it.first == k){
             return true;
         }
     }
+    return false;
 }
 
 
@@ -222,10 +210,8 @@ bool operator==(const HashTable& a, const HashTable& b){
 
 
 bool operator!=(const HashTable& a, const HashTable& b){
-
         bool size = a.buffer_size == b.buffer_size;
         bool arrs = a.arr == b.arr;
         bool r = size && arrs;
         return !r;
-
 }
