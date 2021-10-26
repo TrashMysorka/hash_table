@@ -68,16 +68,17 @@ TEST_F(HashTableTest, CopyConstructWorks){
     EXPECT_EQ(r1, true);
     bool r2 = t3.contains("someone");
     EXPECT_EQ(r2, false);
-    HashTable t5 = t2;
+
+}
+TEST_F(HashTableTest, MoveConstructWorks){
     HashTable t4 = std::move(t2);
 
-    r0 = t5.contains("Bob Marley");
-    r1 = t5.contains("Barry Allen");
-    r2 = t5.contains("Sergey Bobr");
+    bool r0 = t4.contains("Bob Marley");
+    bool r1 = t4.contains("Barry Allen");
+    bool r2 = t4.contains("Sergey Bobr");
     bool r3 = t2.empty();
     EXPECT_EQ(r0, true);
     EXPECT_EQ(r1, true);
     EXPECT_EQ(r2, true);
     EXPECT_EQ(r3, true);
-    //EXPECT_EQ(t5, t4);
 }
